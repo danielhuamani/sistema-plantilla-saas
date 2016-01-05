@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-xs-12">
+			<div class="container">
+				<div class="box-header">
+					<h2>Plantilla</h2>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					{% for theme in listado_themes %}
+					<div class="col-xs-4">
+						<a href="#" class="thumbnail">
+					      <img src="{{STATIC_URL}}{{theme.imagen_url}}" alt="...">
+					    </a>
+					    <div class="caption">
+					    	<h3>{{theme.titulo}}</h3>
+					    </div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+	</div>
+</div>
+{% endblock content %}

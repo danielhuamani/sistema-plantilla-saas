@@ -5,16 +5,21 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">SISTEMA DE PLANTILLAS</a>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-7"> 
-            <ul class="nav navbar-nav"> 
-                <li class="active"><a href="{% url 'configuracion:home' %}">Configuracion de Theme</a></li> 
-                <li><a href="{% url 'configuracion:variables' %}">Variables</a></li> 
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-7">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{% url 'configuracion:home' %}">Configuracion de Theme</a></li>
+                <li><a href="{% url 'configuracion:variables' %}">Variables</a></li>
                 <li><a href="">Link</a></li>
-            </ul> 
+                <li><a href="{% url 'theme:registrar' %}">Registrar</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="#">{{request.user}}</a></li>
+
+                {% endif %}
+            </ul>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        
+
       </div><!-- /.container-fluid -->
     </nav>
 </header>

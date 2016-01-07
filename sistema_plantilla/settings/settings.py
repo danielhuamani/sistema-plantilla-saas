@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'apps.productos',
     'apps.clientes',
     'apps.configuracion',
+    'apps.theme'
 )
 
 MIDDLEWARE_CLASSES = (

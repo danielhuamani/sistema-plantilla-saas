@@ -12,7 +12,7 @@
                 <li><a href="">Link</a></li>
                 <li><a href="{% url 'theme:registrar' %}">Registrar</a></li>
                 {% if request.user.is_authenticated %}
-                <li><a href="#">{{request.user}}</a></li>
+                <li><a href="#">Usuario: {{request.user}}</a></li>
 
                 {% endif %}
             </ul>

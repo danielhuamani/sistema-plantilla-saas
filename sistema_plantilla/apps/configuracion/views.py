@@ -7,7 +7,6 @@ from PIL import Image
 
 
 def home(request):
-    print (settings.BASE_DIR)
     carpeta_templates = join(settings.BASE_DIR, 'templates')
     carpeta_static = join(settings.BASE_DIR, 'static')
     listado_themes = []

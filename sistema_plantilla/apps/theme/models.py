@@ -1,14 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
+from apps.theme_admin.models import ThemeAdmin
 
 
 class Theme(models.Model):
     usuario = models.ForeignKey(User, related_name='user_theme')
-    theme_titulo = models.CharField("Titulo", max_length=255)
+    theme_titulo = models.CharField("Titulo", max_length=255, unique=True)
+    estado = models.BooleanField("Estado", default=True)
 
     class Meta:
         verbose_name = "Theme"
         verbose_name_plural = "Themes"
 
     def __str__(self):
-        pass
+        return "Theme elegido"
+
+
+class ThemeActivo(models.Model):
+    theme_admin = models.ForeignKey(ThemeAdmin, related_name='theme_admin_activo', null=True)
+    theme = models.ForeignKey(Theme, related_name='theme_activo', null=True, unique=True)
+    estado = models.BooleanField("Estado", default=False)
+
+    class Meta:
+        verbose_name = "ThemeActivo"
+        verbose_name_plural = "ThemeActivos"
+
+    def __str__(self):
+        return "Theme elegido"

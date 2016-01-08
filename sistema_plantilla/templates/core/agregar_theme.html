@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-xs-12">
+			<div class="box box-primary">
+				<div class="box-header">
+					<h2>Agregar Theme</h2>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="col-ms-12">
+					<form action="#" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="control-form">
+							<input type="hidden" value="{{request.user.id}}" name="usuario">
+						</div>
+						<div class="form-control">
+							<input type="text" name="theme_titulo">
+							{{form.theme_titulo.errors}}
+						</div>
+						<div class="form-control">
+							<input type="file" name="theme_comprimido">
+						</div>
+						<button class="btn btn-success">Agregar</button>
+					</form>
+				</div>
+			</div>
+	</div>
+</div>
+{% endblock content %}

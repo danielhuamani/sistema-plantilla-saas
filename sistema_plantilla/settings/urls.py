@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'', include('apps.productos.urls', namespace='productos')),
     url(r'^configuracion/', include('apps.configuracion.urls', namespace='configuracion')),
     url(r'^theme/', include('apps.theme.urls', namespace='theme')),
+    url(r'^theme-admin/', include('apps.theme_admin.urls', namespace='theme_admin')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

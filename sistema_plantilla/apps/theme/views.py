@@ -7,7 +7,7 @@ from .forms import ThemeForm
 import os
 from os.path import join
 from zipfile import ZipFile
-import StringIO
+# import StringIO
 import shutil
 
 
@@ -37,21 +37,27 @@ def agregar_theme(request):
             # theme = form.save()
             # creacion_carpetas(request.user.username, theme.theme_titulo)
             unziped = ZipFile(request.FILES.get('theme_comprimido'), 'r')
-            print StringIO.StringIO(unziped)
-            print unziped
+            # print StringIO.StringIO(unziped)
+            # print unziped
             # with ZipFile(unziped) as f:
             #     try:
             #         f.extractall(PATH, pwd=pwd)
             #     except RuntimeError:
             #         pwd = raw_input("Clave para %s: " % filename)
             #         decompress(FIELDNAME = forms.URLField()ilename, pwd=pwd)
-            print unziped.namelist()
+            # print unziped.namelist()
             for file_path in unziped.namelist():
-                split_template = file_path.split("/")
-                if split_template[1] == 'template':
-                    print "entro"
+                split_directorio = file_path.split("/")
+                print (split_directorio)
+                if split_directorio[1] == 'template':
+                    # print "entro"
                     archivo = unziped.extract(file_path, "templates/"+request.user.username+"/"+request.POST.get('theme_titulo'))
-                    shutil.move(archivo, join(settings.BASE_DIR, 'templates') + "/" + request.user.username + "/" + "te")
+                    # shutil.move(archivo, join(settings.BASE_DIR, 'templates') + "/" + request.user.username + "/" + request.POST.get('theme_titulo'))
+                if split_directorio[1] == 'static':
+                    # print "entro"
+                    archivo = unziped.extract(file_path, "static/"+request.user.username+"/"+request.POST.get('theme_titulo'))
+                    # movio_static = shutil.move(archivo, join(settings.BASE_DIR, 'static') + "/" + request.user.username + "/" + request.POST.get('theme_titulo'))
+                    # print (movio_static)
 
                 # file_content = unziped.printdir()
             # print "----"

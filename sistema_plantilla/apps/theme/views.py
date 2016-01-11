@@ -34,31 +34,32 @@ def agregar_theme(request):
     if request.method == "POST":
         form = ThemeForm(request.POST, request.FILES)
         if form.is_valid():
-            # theme = form.save()
-            # creacion_carpetas(request.user.username, theme.theme_titulo)
+            nombre_carpeta = ""
+            error_template = False
+            error_static = False
+            mensaje = ""
             unziped = ZipFile(request.FILES.get('theme_comprimido'), 'r')
-            # print StringIO.StringIO(unziped)
-            # print unziped
-            # with ZipFile(unziped) as f:
-            #     try:
-            #         f.extractall(PATH, pwd=pwd)
-            #     except RuntimeError:
-            #         pwd = raw_input("Clave para %s: " % filename)
-            #         decompress(FIELDNAME = forms.URLField()ilename, pwd=pwd)
-            # print unziped.namelist()
             for file_path in unziped.namelist():
                 split_directorio = file_path.split("/")
-                print (split_directorio)
-                if split_directorio[1] == 'template':
-                    # print "entro"
+                if split_directorio[0] != 'template' and split_directorio[0] != 'static':
+                    if not nombre_carpeta:
+                        nombre_carpeta = split_directorio[0]
+                if split_directorio[1] == 'template' or split_directorio[0] == 'template':
                     archivo = unziped.extract(file_path, "templates/"+request.user.username+"/"+request.POST.get('theme_titulo'))
-                    # shutil.move(archivo, join(settings.BASE_DIR, 'templates') + "/" + request.user.username + "/" + request.POST.get('theme_titulo'))
-                if split_directorio[1] == 'static':
+                    if not error_template:
+                        error_template = True
+                if split_directorio[1] == 'static' or split_directorio[0] == 'static':
                     # print "entro"
                     archivo = unziped.extract(file_path, "static/"+request.user.username+"/"+request.POST.get('theme_titulo'))
-                    # movio_static = shutil.move(archivo, join(settings.BASE_DIR, 'static') + "/" + request.user.username + "/" + request.POST.get('theme_titulo'))
-                    # print (movio_static)
-
+                    if not error_static:
+                        error_static = True
+            if error_static and error_template:
+                theme = form.save()
+                theme.carpeta_titulo = nombre_carpeta
+                theme.save()
+                mensaje = "Se Creo el theme Satisfactoriamente"
+            else:
+                mensaje = "Hubo error posiblemente por que no tiene la carpeta template y static"
                 # file_content = unziped.printdir()
             # print "----"
             # print file_path
@@ -68,9 +69,3 @@ def agregar_theme(request):
     return render(request, 'core/agregar_theme.html', locals())
 
 
-def creacion_carpetas(username, nombre_carpeta):
-    carpeta_templates = join(settings.BASE_DIR, 'templates') + "/" + username
-    carpeta_static = join(settings.BASE_DIR, 'static') + "/" + username
-    os.mkdir(carpeta_templates+"/"+nombre_carpeta)
-    os.mkdir(carpeta_static+"/"+nombre_carpeta)
-    return False

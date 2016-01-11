@@ -7,6 +7,7 @@ class Theme(models.Model):
     usuario = models.ForeignKey(User, related_name='user_theme')
     theme_titulo = models.CharField("Titulo", max_length=255, unique=True)
     estado = models.BooleanField("Estado", default=True)
+    carpeta_titulo = models.CharField("Titulo de Carpeta", max_length=120, blank=True)
 
     class Meta:
         verbose_name = "Theme"

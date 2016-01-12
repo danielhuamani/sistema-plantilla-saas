@@ -34,11 +34,18 @@ def agregar_theme(request):
     if request.method == "POST":
         form = ThemeForm(request.POST, request.FILES)
         if form.is_valid():
+            try:
+                ZipFile(request.FILES.get('theme_comprimido'), 'r')
+            except Exception, e:
+                print "errrrrrrr"
             nombre_carpeta = ""
             error_template = False
             error_static = False
+            error_imagen = False
+            error_json = False
             mensaje = ""
             unziped = ZipFile(request.FILES.get('theme_comprimido'), 'r')
+            print unziped.namelist()
             for file_path in unziped.namelist():
                 split_directorio = file_path.split("/")
                 if split_directorio[0] != 'template' and split_directorio[0] != 'static':

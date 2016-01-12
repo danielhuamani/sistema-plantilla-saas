@@ -36,7 +36,7 @@ def lectura_themes(carpeta_templates, carpeta_static):
         except IOError as e:
             print ("error")
         try:
-            with open(templates+'/'+x+'/init.json') as f:
+            with open(templates+'/'+x+'/conf.json') as f:
                 env = json.load(f)
         except IOError as e:
             print ("no existe el archivo init")

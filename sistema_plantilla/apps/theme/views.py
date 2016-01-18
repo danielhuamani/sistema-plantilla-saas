@@ -1,15 +1,12 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic.edit import CreateView
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from .forms import ThemeForm
-import os
 from os.path import join
 from zipfile import ZipFile
-# import StringIO
-import shutil
-
 
 class UsuarioCreate(CreateView):
     model = User
@@ -34,17 +31,14 @@ def agregar_theme(request):
     if request.method == "POST":
         form = ThemeForm(request.POST, request.FILES)
         if form.is_valid():
-            try:
-                ZipFile(request.FILES.get('theme_comprimido'), 'r')
-            except Exception, e:
-                print "errrrrrrr"
+            ZipFile(request.FILES.get('comprimido'), 'r')
             nombre_carpeta = ""
             error_template = False
             error_static = False
             error_imagen = False
             error_json = False
             mensaje = ""
-            unziped = ZipFile(request.FILES.get('theme_comprimido'), 'r')
+            unziped = ZipFile(request.FILES.get('comprimido'), 'r')
             print unziped.namelist()
             for file_path in unziped.namelist():
                 split_directorio = file_path.split("/")
@@ -65,6 +59,7 @@ def agregar_theme(request):
                 theme.carpeta_titulo = nombre_carpeta
                 theme.save()
                 mensaje = "Se Creo el theme Satisfactoriamente"
+                return redirect(reverse_lazy("configuracion:home"))
             else:
                 mensaje = "Hubo error posiblemente por que no tiene la carpeta template y static"
                 # file_content = unziped.printdir()

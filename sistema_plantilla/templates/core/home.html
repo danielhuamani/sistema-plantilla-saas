@@ -1,38 +1,96 @@
 {% extends "core/base.html" %}
 {% block content %}
 <div class="row">
-	<div class="col-xs-12">
-			<div class="box box-primary">
-				<div class="box-header">
-					<h2>Plantilla</h2>
-				</div>
-			</div>
-			<div class="box-body">
-				<div class="col-ms-12">
-					<form action="" method="POST">
-					{% for theme in listado_themes %}
-					<div class="col-xs-4">
-						<a href="#" class="thumbnail">
-					      <img src="{{STATIC_URL}}{{theme.imagen_url}}" alt="...">
-					    </a>
-					    <div class="caption">
-					    	<h3>{{theme.titulo}}</h3>
-					    </div>
-					    <div class="form-group">
-					    	<label for="">Elije theme</label>
-					    	<input type="radio" class="form-control" name="theme" value="{{theme.titulo}}">
-					    </div>
-					</div>
-					{% endfor %}
-					</form>
-				</div>
-				<div class="col-xs-12">
-					<h2>Mis Plantillas</h2>
-				</div>
-				<div class="add-theme col-xs-12">
-					<a href="{% url 'theme:agregar_theme' %}" class="btn btn-info">Agregar Theme</a>
-				</div>
-			</div>
-	</div>
+    <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h2>Plantilla</h2>
+                </div>
+            </div>
+            <div class="box-body">
+                <form action="" method="POST" id="form-theme">
+                    {% csrf_token %}
+                    <div class="col-ms-12">
+                        {% for theme in listado_themes %}
+                        <div class="col-xs-4">
+                            <a href="#" class="thumbnail">
+                              <img src="{{STATIC_URL}}{{theme.imagen_url}}" alt="...">
+                            </a>
+                            <div class="caption">
+                                <h3>{{theme.titulo}}</h3>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Elije theme</label>
+                                <input type="hidden" value="admin">
+                                <input type="radio" class="form-control" name="theme"  value="{{theme.titulo}}">
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xs-12">
+                        <h2>Mis Plantillas</h2>
+                    </div>
+                    <div class="col-ms-12">
+
+                        {% for my_theme in listado_my_themes %}
+                        <div class="col-xs-4">
+                            <a href="#" class="thumbnail">
+                              <img src="{{STATIC_URL}}{{my_theme.imagen_url}}" alt="...">
+                            </a>
+                            <div class="caption">
+                                <h3>{{my_theme.titulo}}</h3>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Elije my_theme</label>
+                                <input type="hidden" value="user">
+                                <input type="radio"  {% if estado_activo == my_theme.titulo %}checked="checked"{% endif %} class="form-control" name="theme" value="{{my_theme.theme_pk}}">
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xs-12">
+                        <button class="btn btn-success" >Guardar</button>
+                        {{form}}
+                    </div>
+                </form>
+                <div class="add-theme col-xs-12">
+                    <a href="{% url 'theme:agregar_theme' %}" class="btn btn-info">Agregar Theme</a>
+                </div>
+                <form action="#" method="POST" id="form-activar-theme">
+                    {% csrf_token %}
+                    <input type="hidden" name="theme_admin" id="theme_admin">
+                    <input type="hidden" name="theme" id="theme">
+
+                </form>
+            </div>
+    </div>
 </div>
 {% endblock content %}
+{% block js %}
+<script>
+    $(document).ready(function() {
+        $("#form-theme").submit(function(event) {
+            /* Act on the event */
+            var theme_pk = "";
+            var tipo_theme = "";
+            event.preventDefault()
+            $("input[type=radio]").each(function(index, el) {
+                if($(this).is(':checked') == true){
+                    theme_pk = $(this).val();
+                    tipo_theme = $(this).parent().find("input[type=hidden]").val();
+                };
+            });
+            if(tipo_theme == "user"){
+                $("#theme").val(theme_pk);
+                $("#form-activar-theme").submit();
+            }
+            if(tipo_theme == "admin"){
+                $("#theme_admin").val(theme_pk);
+                $("#form-activar-theme").submit();
+            }
+
+
+        });
+    });
+</script>
+{% endblock js %}

@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'apps.clientes',
     'apps.configuracion',
     'apps.theme',
-    'apps.theme_admin'
+    'apps.theme_admin',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (

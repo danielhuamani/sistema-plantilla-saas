@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from apps.theme_admin.models import ThemeAdmin
+from django.core.exceptions import ValidationError
 
 
 def validate_file_extension(value):
@@ -8,7 +9,7 @@ def validate_file_extension(value):
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
     valid_extensions = ['.zip']
     if not ext in valid_extensions:
-        raise ValidationError(u'Unsupported file extension.')
+        raise ValidationError(u'Le extension debe ser .zip')
 
 
 class Theme(models.Model):
@@ -23,12 +24,12 @@ class Theme(models.Model):
         verbose_name_plural = "Themes"
 
     def __str__(self):
-        return "Theme elegido"
+        return self.theme_titulo
 
 
 class ThemeActivo(models.Model):
-    theme_admin = models.ForeignKey(ThemeAdmin, related_name='theme_admin_activo', null=True)
-    theme = models.ForeignKey(Theme, related_name='theme_activo', null=True, unique=True)
+    theme_admin = models.ForeignKey(ThemeAdmin, related_name='theme_admin_activo', null=True, blank=True)
+    theme = models.ForeignKey(Theme, related_name='theme_activo', null=True, blank=True)
     estado = models.BooleanField("Estado", default=False)
 
     class Meta:
